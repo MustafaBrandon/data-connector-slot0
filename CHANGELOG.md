@@ -1,3 +1,10 @@
+## 1.0.0 (2022-08-22)
+
+
+### Features
+
+* :zap: First MVP ([d262734](https://github.com/MustafaBrandon/data-connector-slot0/commit/d262734bd19c11270eeaf20bf67c5d6c6054acc5))
+
 ## 1.0.0 (2022-08-10)
 
 
