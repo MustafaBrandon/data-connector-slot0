@@ -48,10 +48,13 @@ describe("WASM Transformation Module", () => {
       myModule.initialize(config, timestamp);
       const result = myModule.main("");
       let hexResult = hexEncode(result) as string;
-      
+
       hexResult = hexResult.replace(/000d/g, '');
-      hexResult = hexResult.replace(/0002/g, '');
-      const hexExpected = hexEncode(response);
+      hexResult = hexResult.replace(/000a/g, '');
+      // hexResult = hexResult.replace(/0002/g, '');
+
+      let hexExpected = hexEncode(response);
+      // hexExpected = hexExpected.replace(/0002/g, '');
       expect(hexResult).toBe(hexExpected);
     });
 
@@ -65,29 +68,30 @@ describe("WASM Transformation Module", () => {
     //   expect(hexResult).toBe(hexExpected);
     // });
 
-    test.only("can process the final response and return true for callback termination", async () => {
+    test("can process the final response and return true for callback termination", async () => {
 
 
 
-      const response = '[{"type":"BigNumber","hex":"0x01000075f010fe2de91b862e8b"},0,0,1,1,0,true]'
+      const _response = '[{"type":"BigNumber","hex":"0x01000075f010fe2de91b862e8b"},0,0,1,1,0,true]'
       const slotConfig = '{"isChainRead": true, "address" : "0x8956814c346300D554cA5598C5a78578C51a394f"}'
 
       const timestamp = 1654012158
       myModule.initialize(slotConfig, timestamp);
       // myModule.main(output);
-      const result = myModule.main(response);
+      const result = myModule.main(_response);
       expect(result).toBe("true");
     });
 
     test("can run transformation and return candles", async () => {
       const timestamp = 1654012158
       myModule.initialize(config, timestamp);
-      myModule.main(output);
+      const _response = '[{"type":"BigNumber","hex":"0x01000075f010fe2de91b862e8b"},0,0,1,1,0,true]'
+      myModule.main(_response);
       const result = myModule.transform();
       // let hexResult = hexEncode(result) as string;
       // hexResult = hexResult.replace(/000d/g, '');
       // const hexExpected = hexEncode(candles);
-      expect(result).toBe(`{"data": "837.0"}`);
+      expect(result).toBe(`{"data": "0"}`);
     });
 
   });
