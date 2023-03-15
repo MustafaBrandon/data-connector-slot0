@@ -1,16 +1,11 @@
 const fs = require("fs");
-import * as AsBind from "as-bind/dist/as-bind.cjs.js";
-
-
+const AsBind = require("as-bind/dist/as-bind.cjs.js");
 const imports = {
-  // index: { // File which you are injecting
-  //   stringToInt(arg0) {
-  //     return parseInt(arg0)
-  //   }
-  // }
+  console: {
+    log: message => {
+      console.log(asBindInstance.exports.__getString(message));
+    }
+  }
 };
-
 const asBindInstance = AsBind.instantiateSync(fs.readFileSync(__dirname + "/build/untouched.wasm"), imports)
-
 module.exports = asBindInstance.exports;
-
