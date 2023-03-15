@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/SteerProtocol/data-connector-slot0/compare/v1.0.0...v1.1.0) (2023-03-15)
+
+
+### Features
+
+* :zap: as-rehaul ([e40ba43](https://github.com/SteerProtocol/data-connector-slot0/commit/e40ba433a069636186b013f26cee4ff243e5f3c5))
+
 ## 1.0.0 (2022-08-22)
 
 
