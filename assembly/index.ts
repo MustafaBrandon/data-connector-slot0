@@ -3,27 +3,28 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
 
 // Data connector to read the total supply off a contract
 
+
 // Local Variables
   var tick: u64; 
+  var chainId: string = "";
   var address: string = "";
-  var chain: string = "";
 
   @serializable
   class Config extends DataConnectorConfig{
+    chainId: string = "";
     address: string = "";
-    chain: string = "";
   }
 
   // Initializes variables from the config file
   export function initialize(config: string): void {
     // parse through the config and assing locals
     const configJson: Config = JSON.parse<Config>(config);
-    if (configJson.chain == null ||
+    if (configJson.chainId == null ||
     configJson.address == null) {
       throw new Error("Config not properly formatted");
     }
+    chainId = configJson.chainId;
     address = configJson.address;
-    chain = configJson.chain;
   }
 
 
@@ -36,7 +37,7 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
 "address" : \"` + address + `\",
 "arguments" : [],
 "method" : "slot0",
-"chainId" : ` + chain + `
+"chainId" : ` + chainId + `
 }`
     }
 
@@ -94,7 +95,8 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
     "isChainRead" : {
       "type": "boolean",
       "title": "Is this a view or pure contract call?",
-      "default": true
+      "default": true,
+      "hidden":true
     }
   }
 }`; 
