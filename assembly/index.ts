@@ -3,12 +3,15 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
 
 // Data connector to read the total supply off a contract
 
+
 // Local Variables
   var tick: u64; 
+  var chainId: string = "";
   var address: string = "";
 
   @serializable
   class Config extends DataConnectorConfig{
+    chainId: string = "";
     address: string = "";
   }
 
@@ -16,10 +19,11 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
   export function initialize(config: string): void {
     // parse through the config and assing locals
     const configJson: Config = JSON.parse<Config>(config);
-    if (configJson.address == "" ||
+    if (configJson.chainId == null ||
     configJson.address == null) {
       throw new Error("Config not properly formatted");
     }
+    chainId = configJson.chainId;
     address = configJson.address;
   }
 
@@ -32,7 +36,8 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
 "abi" : [{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint160","name":"sqrtPriceX96","type":"uint160"},{"internalType":"int24","name":"tick","type":"int24"},{"internalType":"uint16","name":"observationIndex","type":"uint16"},{"internalType":"uint16","name":"observationCardinality","type":"uint16"},{"internalType":"uint16","name":"observationCardinalityNext","type":"uint16"},{"internalType":"uint8","name":"feeProtocol","type":"uint8"},{"internalType":"bool","name":"unlocked","type":"bool"}],"stateMutability":"view","type":"function"}],
 "address" : \"` + address + `\",
 "arguments" : [],
-"method" : "slot0"
+"method" : "slot0",
+"chainId" : ` + chainId + `
 }`
     }
 
@@ -66,11 +71,6 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
     return tick.toString();
   }
 
-  // An example of what the config object will look like after being created via the configForm
-  export function exampleInputConfig(): string {
-    return `{"address" : '0x8ad599c3A0ff1De082011EFDDc58f1908eb6e6D8', "isChainRead" : true}`
-  }
-
   // Renders the config object in JSON Schema format, which is used
   // by the frontend to display input value options and validate user input.
   export function config(): string {
@@ -87,10 +87,16 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
       "title": "Contract Address",
       "description": "Address of the pool to be read"
     },
+    "chainId": {
+      "type": "string",
+      "title": "Chain ID",
+      "description": "Chain from which to call view function (i.e. Ethereum Mainnet would be '1' and Polygon Mainnet is '137', check the documentation for the full list of supported chains)"
+    },
     "isChainRead" : {
       "type": "boolean",
       "title": "Is this a view or pure contract call?",
-      "default": true
+      "default": true,
+      "hidden":true
     }
   }
 }`; 

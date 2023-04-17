@@ -49,7 +49,7 @@ describe("WASM Transformation Module", () => {
       }).toThrowError();
     });
 
-    test("can return call obj", async () => {
+    test.only("can return call obj", async () => {
       myModule = await loadWasm(fs.readFileSync(__dirname + "/../build/debug.wasm"), {})
       const timestamp = 1654012158
       // const _config = myModule.__pin(myModule.__newString(config));
@@ -62,6 +62,7 @@ describe("WASM Transformation Module", () => {
       // hexResult = hexResult.replace(/0002/g, '');
 
       let hexExpected = hexEncode(response);
+      console.log(result)
       // hexExpected = hexExpected.replace(/0002/g, '');
       expect(hexResult).toBe(hexExpected);
     });
