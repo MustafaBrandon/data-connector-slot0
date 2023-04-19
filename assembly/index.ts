@@ -85,12 +85,13 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
     "address": {
       "type": "string",
       "title": "Contract Address",
-      "description": "Address of the pool to be read"
+      "description": "Address of the uniswapv3 pool contract"
     },
     "chainId": {
       "type": "string",
       "title": "Chain ID",
-      "description": "Chain from which to call view function (i.e. Ethereum Mainnet would be '1' and Polygon Mainnet is '137', check the documentation for the full list of supported chains)"
+      "description": "ChainId from which the view function will be called",
+      "detailedDescription": "Example, the Polygon Mainnet has a chain ID of '137'. You can refer to the Steer documentation to find the full list of supported networks and their corresponding chain IDs. By specifying the correct chain ID, you can ensure that your view function is called on the intended network"
     },
     "isChainRead" : {
       "type": "boolean",

@@ -9,8 +9,8 @@ The `slot0()` function on Uniswapv3 pools returns more data than just the curren
 ## Parameters
 
 - Address: The address of the Uniswapv3 pool contract (must be on same network as vault) to be called.
-- ChainID: The chain ID of where to make this contract call.
-- isChainRead: boolean set to true to signal this data connector fetches on-chain data.
+- ChainID: The chain ID of the network to make the contract call.
+- isChainRead: boolean set to true to signal this data connector to fetch only the on-chain data.
 
 ### Project Setup
 
