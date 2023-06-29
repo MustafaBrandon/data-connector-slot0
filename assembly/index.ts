@@ -5,7 +5,7 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
 
 
 // Local Variables
-  var tick: u64; 
+  var tick: i64; 
   var chainId: string = "";
   var address: string = "";
 
@@ -42,15 +42,18 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
     }
 
     // Parse through the array
+    // ie: `[{_hex: "0x15f6d3cb5f0f9ce3a350efe8",_isBigNumber: true,},-49118,0,1,1,0,true,]`
     // First element might be a big number object, check if so, and then splice for the value and parse
     if (response.length <= 8) throw new Error("Corrupt Chain Call Data");
 
     let currentTickString: string;
     // see if first element is ethers bn obj
     if (response.at(1) == '{') {
-      const splitData = response.split(',');
-      // our value is at index 2
-      currentTickString = splitData[2];
+      // we might have a trailing comma in the bn obj
+      const onlyNumbers = response.split('}')[1];
+      const splitData = onlyNumbers.split(',');
+      // our value is at index 1 
+      currentTickString = splitData[1];
     }
     else {
       // unlikely but if the encoding gives us the first number as js number
@@ -58,8 +61,7 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
       // our value is at index 1
       currentTickString = splitData[1];
     }
-    const currentTick = i64(parseInt(currentTickString));
-    // if (currentTick == null) throw new Error(); // "Basic types cannot be nullable"
+    const currentTick = i64(parseFloat(currentTickString))
     tick = currentTick;
     return 'true';
   } 
