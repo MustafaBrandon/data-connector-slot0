@@ -12,24 +12,24 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
   @serializable
   class Config extends DataConnectorConfig{
     chainId: string = "";
-    address: string = "";
+    poolAddress: string = "";
   }
 
   // Initializes variables from the config file
   export function initialize(config: string): void {
-    // parse through the config and assing locals
+    // parse through the config and assign locals
     const configJson: Config = JSON.parse<Config>(config);
     if (configJson.chainId == null ||
-    configJson.address == null) {
+    configJson.poolAddress == null) {
       throw new Error("Config not properly formatted");
     }
     chainId = configJson.chainId;
-    address = configJson.address;
+    address = configJson.poolAddress;
   }
 
 
   export function execute(response: string): string {
-    // Check if respone is first call
+    // Check if response is first call
     if (response == ''){
       // return payload
       return `{
@@ -81,10 +81,10 @@ import {  DataConnectorConfig, ExecutionContext  } from "@steerprotocol/strategy
   "description": "Input config for reading the slot0 function on a Uniswapv3 pool",
   "type": "object",
   "required": [
-    "address"
+    "poolAddress"
   ],
   "properties": {
-    "address": {
+    "poolAddress": {
       "type": "string",
       "title": "Contract Address",
       "description": "Address of the uniswapv3 pool contract"
