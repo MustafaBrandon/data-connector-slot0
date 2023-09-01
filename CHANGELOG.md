@@ -1,3 +1,15 @@
+## [1.2.0](https://github.com/SteerProtocol/data-connector-slot0/compare/v1.1.0...v1.2.0) (2023-09-01)
+
+
+### Features
+
+* :zap: Established Format ([10b8e9a](https://github.com/SteerProtocol/data-connector-slot0/commit/10b8e9ab0fdf2fb76a41f992559b5bc4985392c7))
+
+
+### Bug Fixes
+
+* :ambulance: Removed accidental casting to unisgned int ([44518a3](https://github.com/SteerProtocol/data-connector-slot0/commit/44518a3dbbf209431a5804ba601ba250e8c23511))
+
 ## [1.1.0](https://github.com/SteerProtocol/data-connector-slot0/compare/v1.0.0...v1.1.0) (2023-03-15)
 
 
