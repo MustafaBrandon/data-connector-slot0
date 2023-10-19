@@ -1,0 +1,15 @@
+{
+  "extends": "assemblyscript/std/assembly.json",
+  "include": [
+    "./assembly/**/*.ts"
+  ],
+  "typedocOptions": {
+    "entryPoints": ["assembly/index.ts"],
+    "out": "docs",
+    "excludeExternals": true
+  },
+  "compilerOptions": {
+    "skipLibCheck": true,
+  },
+  "exclude": ["node_modules"]
+}
