@@ -8,11 +8,13 @@ import { console } from "@steerprotocol/strategy-utils/assembly/utils/console";
   var tick: i64; 
   var chainId: string = "";
   var poolAddress: string = "";
+  var algebraVersion: string = "";
 
   @serializable
   class Config extends DataConnectorConfig{
     chainId: string = "";
     poolAddress: string = "";
+    algebraVersion: string = "";
   }
 
   // Initializes variables from the config file
@@ -25,15 +27,29 @@ import { console } from "@steerprotocol/strategy-utils/assembly/utils/console";
     }
     chainId = configJson.chainId;
     poolAddress = configJson.poolAddress;
+    algebraVersion = configJson.algebraVersion;
   }
 
 
   export function execute(response: string): string {
     // Check if respone is first call
     if (response == ''){
+
+      // assign abi
+      let abi: string;
+
+      if (algebraVersion === "1.0") {
+        abi = `{"inputs":[],"name":"globalState","outputs":[{"internalType":"uint160","name":"price","type":"uint160"},{"internalType":"int24","name":"tick","type":"int24"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"uint16","name":"timepointIndex","type":"uint16"},{"internalType":"uint8","name":"communityFeeToken0","type":"uint8"},{"internalType":"uint8","name":"communityFeeToken1","type":"uint8"},{"internalType":"bool","name":"unlocked","type":"bool"}],"stateMutability":"view","type":"function"}`;
+      } else if (algebraVersion === "1.9") {
+        abi = `{"inputs":[],"name":"globalState","outputs":[{"internalType":"uint160","name":"price","type":"uint160"},{"internalType":"int24","name":"tick","type":"int24"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"uint16","name":"timepointIndex","type":"uint16"},{"internalType":"uint16","name":"communityFeeToken0","type":"uint16"},{"internalType":"uint16","name":"communityFeeToken1","type":"uint16"},{"internalType":"bool","name":"unlocked","type":"bool"}],"stateMutability":"view","type":"function"}`;
+      } else if (algebraVersion === "1.9 Directional") {
+        abi = `{"inputs":[],"name":"globalState","outputs":[{"internalType":"uint160","name":"price","type":"uint160"},{"internalType":"int24","name":"tick","type":"int24"},{"internalType":"uint16","name":"feeZto","type":"uint16"},{"internalType":"uint16","name":"feeOtz","type":"uint16"},{"internalType":"uint16","name":"timepointIndex","type":"uint16"},{"internalType":"uint8","name":"communityFeeToken0","type":"uint8"},{"internalType":"uint8","name":"communityFeeToken1","type":"uint8"},{"internalType":"bool","name":"unlocked","type":"bool"}],"stateMutability":"view","type":"function"}`;
+      } else {
+        throw new Error("Unrecognized Alg Version");
+      }
       // return payload
       return `{
-"abi" : [{"inputs":[],"name":"globalState","outputs":[{"internalType":"uint160","name":"price","type":"uint160"},{"internalType":"int24","name":"tick","type":"int24"},{"internalType":"uint16","name":"fee","type":"uint16"},{"internalType":"uint16","name":"timepointIndex","type":"uint16"},{"internalType":"uint8","name":"communityFeeToken0","type":"uint8"},{"internalType":"uint8","name":"communityFeeToken1","type":"uint8"},{"internalType":"bool","name":"unlocked","type":"bool"}],"stateMutability":"view","type":"function"}],
+"abi" : [` + abi + `],
 "address" : \"` + poolAddress + `\",
 "arguments" : [],
 "method" : "globalState",
@@ -83,29 +99,41 @@ import { console } from "@steerprotocol/strategy-utils/assembly/utils/console";
   // by the frontend to display input value options and validate user input.
   export function config(): string {
     return `{
-  "title": "Calls Algebra pool's slot0 function",
-  "description": "Input config for reading the slot0 function on a AlgebraV3 pool",
-  "type": "object",
-  "required": [
-    "poolAddress"
-  ],
-  "properties": {
-    "poolAddress": {
-      "type": "string",
-      "title": "Contract Address",
-      "description": "Address of the pool to be read"
-    },
-    "chainId": {
-      "type": "string",
-      "title": "Chain ID",
-      "description": "Chain from which to call view function (i.e. Ethereum Mainnet would be '1' and Polygon Mainnet is '137', check the documentation for the full list of supported chains)"
-    },
-    "isChainRead" : {
-      "type": "boolean",
-      "title": "Is this a view or pure contract call?",
-      "default": true,
-      "hidden":true
-    }
-  }
-}`; 
+      "title": "Calls Algebra pool's GlobalState function for the current tick",
+      "description": "Input config for reading the current tick of an Algebra pool",
+      "type": "object",
+      "required": [
+        "poolAddress",
+        "chainId",
+        "algebraVersion"
+      ],
+      "properties": {
+        "poolAddress": {
+          "type": "string",
+          "title": "Contract Address",
+          "description": "Address of the pool to be read"
+        },
+        "chainId": {
+          "type": "string",
+          "title": "Chain ID",
+          "description": "Chain from which to call view function (i.e. Ethereum Mainnet would be '1' and Polygon Mainnet is '137', check the documentation for the full list of supported chains)"
+        },
+        "isChainRead": {
+          "type": "boolean",
+          "title": "Is this a view or pure contract call?",
+          "default": true,
+          "hidden": true
+        },
+        "algebraVersion": {
+          "type": "string",
+          "title": "Algebra Version",
+          "enum": [
+            "1.0",
+            "1.9",
+            "1.9 Directional"
+          ],
+          "description": "Check https://docs.algebra.finance/en/docs/contracts/partners/introduction to check the DEX's pool versions."
+        }
+      }
+    }`; 
   }
